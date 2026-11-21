@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0b0a">
+<title>Vaultly</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- Monetag SDK: নিচের data-zone ও data-sdk এ নিজের Zone ID বসান -->
+<script id="monetag-sdk" src="https://libtl.com/sdk.js" data-zone="YOUR_ZONE_ID" data-sdk="show_YOUR_ZONE_ID" async></script>
+<style>
+:root{--bg:#0d0b0a;--card:#181412;--card2:#201a17;--line:#33291f;--tx:#f6efe7;--mut:#a89a8a;--a1:#ffb84d;--a2:#ff5f6d;--ok:#5ee6a8;--g:linear-gradient(135deg,#ffb84d,#ff5f6d)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;color:var(--tx);font-family:system-ui,-apple-system,"Noto Sans Bengali",Arial,sans-serif;background:radial-gradient(420px 320px at 100% 0,rgba(255,95,109,.18),transparent),radial-gradient(420px 320px at 0 100%,rgba(255,184,77,.12),transparent),var(--bg)}
+.app{max-width:620px;margin:auto;padding:max(14px,env(safe-area-inset-top)) 16px max(18px,env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{width:50px;height:50px;border-radius:16px;background:var(--g);display:grid;place-items:center;box-shadow:0 8px 24px rgba(255,95,109,.35),inset 0 1px 0 rgba(255,255,255,.4);user-select:none}
+.logo svg{width:28px;height:28px}
+.brand{flex:1}.brand b{font-family:Georgia,"Times New Roman",serif;font-size:24px;letter-spacing:1px}.brand small{display:block;color:var(--mut);letter-spacing:3px;font-size:9.5px;margin-top:2px}
+.pill{color:var(--a1);background:rgba(255,184,77,.1);border:1px solid rgba(255,184,77,.35);border-radius:20px;padding:6px 11px;font-size:11.5px;font-weight:600}
+.cd{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:22px;padding:18px;margin-top:14px;box-shadow:0 12px 30px rgba(0,0,0,.35)}.c{text-align:center}
+h2{font-family:Georgia,serif;font-size:24px;margin:10px 0 6px;font-weight:700}h3{margin:0 0 8px;font-size:16px}p{color:var(--mut);line-height:1.6;margin:5px 0;font-size:14px}
+.big{width:84px;height:84px;margin:4px auto 10px;border-radius:26px;background:var(--g);display:grid;place-items:center;font-size:36px;box-shadow:0 10px 30px rgba(255,95,109,.35)}
+.rg{position:relative;width:110px;height:110px;margin:2px auto 8px}.rg svg{width:100%;height:100%;transform:rotate(-90deg)}.rg b{position:absolute;inset:0;display:grid;place-items:center;font-family:Georgia,serif;font-size:30px}.rg b small{font-size:14px;color:var(--mut)}
+.rg circle{transition:stroke-dashoffset .7s ease}
+.vs{position:relative;display:flex;align-items:center;gap:13px;padding:13px;border-radius:16px;border:1px solid var(--line);margin-top:10px;background:var(--card)}
+.vs.cur{border-color:var(--a1);background:linear-gradient(90deg,rgba(255,184,77,.12),transparent)}.vs.lk{opacity:.45}
+.ci{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;background:var(--card2);border:1px solid var(--line);flex:none}
+.vs.cur .ci{background:var(--g);border:0;color:#2a1305}.vs.dn .ci{background:var(--ok);border:0;color:#052a1a;animation:pop .4s}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.2)}}
+.vs .t{flex:1;min-width:0}.vs b{display:block;font-size:15px}.vs small{color:var(--mut);font-size:12.5px}
+button{cursor:pointer;border:0;color:var(--tx);font-family:inherit;font-weight:700}
+.btn{width:100%;border-radius:16px;padding:16px;font-size:16px;color:#2a1305;background:var(--g);box-shadow:0 10px 26px rgba(255,95,109,.35);margin-top:14px;letter-spacing:.3px}
+.btn:active,.sm:active{transform:scale(.97)}button:disabled{opacity:.55;cursor:wait}
+.sm{border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:9px 13px;font-size:13px}.sm.s{background:var(--g);color:#2a1305;border:0}.sm.r{background:#7a2230;border:0}
+.sp{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sn .8s linear infinite;vertical-align:-3px;margin-right:6px}@keyframes sn{to{transform:rotate(360deg)}}
+.fi{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:8px 0 4px}.ico{width:92px;height:92px;border-radius:28px;background:var(--g);display:grid;place-items:center;font-size:42px;box-shadow:0 12px 30px rgba(255,95,109,.35)}
+.fi b{display:block;word-break:break-word;font-family:Georgia,serif;font-size:21px}.fi small{color:var(--mut)}
+.chips{display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap}.chips i{font-style:normal;font-size:12px;color:var(--a1);background:rgba(255,184,77,.1);border:1px solid rgba(255,184,77,.25);padding:4px 10px;border-radius:20px}
+.notice{display:block;background:rgba(255,184,77,.07);border:1px dashed rgba(255,184,77,.45);padding:13px 15px;border-radius:16px;margin-top:16px;font-size:13.5px;color:var(--tx);white-space:pre-wrap;line-height:1.6;text-align:left}.notice b{color:var(--a1);display:block;margin-bottom:4px;font-size:12px;letter-spacing:2px}
+input,textarea{width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);background:#100d0b;color:var(--tx);font-size:15px;margin:5px 0 9px;font-family:inherit}input:focus,textarea:focus{outline:0;border-color:var(--a1)}
+label{display:block;font-size:12.5px;color:var(--mut);margin-top:6px}
+.pick{position:relative;display:block;text-align:center;padding:20px;border:2px dashed rgba(255,184,77,.5);border-radius:18px;background:rgba(255,184,77,.05);color:var(--a1);font-weight:700;margin:8px 0;word-break:break-all}
+.pick input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}.pick.sel{border-style:solid;border-color:var(--ok);color:var(--ok)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;width:0;background:var(--g);transition:width .2s}
+.it{padding:13px 0;border-top:1px solid var(--line)}.it:first-child{border:0}.it .bt{display:flex;gap:6px;margin-top:8px}.it .bt button{flex:1}
+.err{color:#ff7a85;font-size:13.5px;font-weight:700;margin-top:10px}
+.vbox{position:relative;width:170px;height:170px;margin:14px auto 16px}.vbox svg{position:absolute;inset:0;width:100%;height:100%}
+.glow{position:absolute;inset:-22px;border-radius:50%;background:radial-gradient(circle,rgba(94,230,168,.3),transparent 65%);animation:pu2 2s infinite}@keyframes pu2{50%{transform:scale(1.15);opacity:.6}}
+.spinarc{transform-box:view-box;transform-origin:center;animation:sn .6s linear 2,fo .2s 1.2s forwards}@keyframes fo{to{opacity:0}}
+.ringc{stroke-dasharray:440;stroke-dashoffset:440;animation:dr .9s .5s ease forwards}.tickp{stroke-dasharray:90;stroke-dashoffset:90;animation:dr .5s 1.3s ease forwards}@keyframes dr{to{stroke-dashoffset:0}}
+.vword{font-family:Georgia,serif;font-size:34px;font-weight:700;letter-spacing:7px;text-align:center;background:linear-gradient(90deg,#ffb84d,#5ee6a8);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:wd 1s 1.4s ease forwards}
+@keyframes wd{from{opacity:0;letter-spacing:22px;transform:scale(.8)}to{opacity:1;letter-spacing:7px;transform:scale(1)}}
+.vsub{opacity:0;animation:wd2 .8s 2s forwards}@keyframes wd2{to{opacity:1}}
+.fade{animation:fd .4s}@keyframes fd{from{opacity:0;transform:translateY(10px)}}
+.footer{text-align:center;color:#6d6155;font-size:10px;letter-spacing:3px;margin:26px 0 6px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,40px);background:#2a211b;border:1px solid var(--line);padding:11px 18px;border-radius:30px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:9;max-width:90%;text-align:center}#toast.on{opacity:1;transform:translate(-50%,0)}
+
+select{width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);background:#100d0b;color:var(--tx);font-size:15px;margin:5px 0 9px;font-family:inherit}
+input[type=color]{height:48px;padding:4px;cursor:pointer}
+.bn{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:22px;scrollbar-width:none;box-shadow:0 12px 30px rgba(0,0,0,.4)}.bn::-webkit-scrollbar{display:none}
+.bs{flex:0 0 100%;scroll-snap-align:start;min-height:158px;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:18px;cursor:pointer}
+.bs b{font-family:Georgia,serif;font-size:22px;display:block;text-shadow:0 2px 10px rgba(0,0,0,.6)}.bs p{color:#fff;opacity:.9;font-size:13px;margin:4px 0;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.go{display:inline-block;margin-top:6px;background:rgba(255,255,255,.22);backdrop-filter:blur(6px);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700}
+.bd{display:flex;justify-content:center;gap:6px;margin:10px 0 0}.bd i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.3s}.bd i.on{width:22px;border-radius:5px;background:var(--a1)}
+.pm{padding:0!important;overflow:hidden}.pm .tp{background:#100d0b;padding:22px 16px 16px;text-align:center;border-bottom:1px solid var(--line)}.pm .bt2{padding:20px 18px 18px;text-align:center}
+.pm .nm{font-family:Georgia,serif;font-size:21px;font-weight:700;margin-top:12px;letter-spacing:.5px}.pm .sb{color:var(--mut);font-style:italic;font-size:13px;margin-top:2px}
+.pm h2{margin:0 0 8px}.pm .ds{white-space:pre-wrap;color:#cdbfae;font-size:14.5px;line-height:1.7}
+.mw{overflow:hidden;margin:0 auto;border:2px solid rgba(255,184,77,.35);background:#000}.mw.ph{background:var(--g);display:grid;place-items:center;font-size:44px;border:0}
+.cv{display:block;width:100%;max-height:230px;object-fit:cover;border-radius:18px;margin-bottom:14px}
+.mi{display:flex;align-items:center;gap:14px;padding:15px;border-radius:18px;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);margin-top:10px;cursor:pointer;transition:.15s}
+.mi:active{transform:scale(.97);border-color:var(--a1)}.mic{width:46px;height:46px;border-radius:14px;background:var(--g);display:grid;place-items:center;font-size:22px;flex:none}
+.mi b{display:block}.mi small{color:var(--mut)}.mi .ar{margin-left:auto;color:var(--a1);font-size:24px}
+.bk{display:flex;align-items:center;gap:12px;margin-bottom:6px}.bk b{font-size:18px;font-family:Georgia,serif}
+.sl{animation:sl .3s}@keyframes sl{from{opacity:0;transform:translateX(26px)}}
+.pick{transition:transform .15s}.pick.rp{animation:rp .55s}.pick.rp::first-line{color:#fff}
+@keyframes rp{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,184,77,.65)}35%{transform:scale(.94)}100%{transform:scale(1);box-shadow:0 0 0 26px rgba(255,184,77,0)}}
+</style></head>
+<body><div class="app" id="app"></div><div id="toast"></div>
+<script>
+"use strict";
+/* ============ সেটিংস (এখানে বদলান) ============ */
+const ADMIN_PASSWORD="123456";           // অ্যাডমিন পাসওয়ার্ড — অবশ্যই বদলান
+const VERIFY_STEPS=3;                    // ভেরিফাই ধাপ
+const ZONE="YOUR_ZONE_ID";               // Monetag Zone ID (উপরের script এও একই দিন)
+const BOT_LINK="";                       // উদা: "https://t.me/YourBot/app" — দিলে লিংক হবে BOT_LINK?startapp=ID
+const APP_NAME="Vaultly";
+const FIREBASE_CONFIG=null;              // চাইলে firebaseConfig অবজেক্ট এখানে বসান: {apiKey:"...",projectId:"...",storageBucket:"..."}
+/* =============================================== */
+const tg=window.Telegram&&Telegram.WebApp;
+if(tg){tg.ready();tg.expand();try{tg.setHeaderColor("#0d0b0a");tg.setBackgroundColor("#0d0b0a")}catch(e){}}
+const $=s=>document.querySelector(s),app=$("#app");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toast=m=>{const t=$("#toast");t.textContent=m;t.className="on";clearTimeout(toast.h);toast.h=setTimeout(()=>t.className="",2600)};
+const DS={bnH:140,adz:[],pwh:"",bot:{token:"",chat:""},adLink:1,t:{vh:"Verify to Continue",vs:"Complete 3 quick steps to continue.",s1t:"Human Check",s1d:"Confirm that you are not a robot",s2t:"Device Check",s2d:"Making sure your device is safe",s3t:"Account Confirmation",s3d:"Final step — almost done!",vb:"Verify",vn:"Each step requires watching a short ad",okw:"VERIFIED",oks:"Verification successful! Please wait...",ul:"Unlock File",dl:"Download File",nt:"NOTICE",ft:"Vaultly · 2026"},ads:{code:"",src:"",zone:"",sdk:""},title:"Vaultly",sub:"PRIVATE · FAST · SAFE",banners:[{title:"Join our channel",desc:"Updates every day",link:"",img:""},{title:"New files are here!",desc:"Get the best content right here",link:"",img:""}],promo:{media:{},name:"My Channel",sub:"public channel",title:"File Link Required",desc:"Join our channel and tap any file link there to open it.",btn:"Join Channel",link:"",color:"#ff7a3d"}};
+let S=DS;const mergeS=d=>({...DS,...d,adz:Array.isArray(d.adz)?d.adz:(d.ads&&d.ads.zone?[d.ads]:[]),bot:{...DS.bot,...(d.bot||{})},t:{...DS.t,...(d.t||{})},adLink:d.adLink==null?1:d.adLink,ads:{...DS.ads,...(d.ads||{})},banners:d.banners||DS.banners,promo:{...DS.promo,...(d.promo||{}),media:{...((d.promo&&d.promo.media)||{})}}});
+const T=()=>S.t;
+document.addEventListener("click",e=>{const p=e.target.closest&&e.target.closest(".pick");if(p){p.classList.remove("rp");void p.offsetWidth;p.classList.add("rp")}},true);
+const SES={n:0,ok:false,admin:false,unl:{}};let taps=0,FB={db:null,st:null,cfg:null},CFG=FIREBASE_CONFIG;
+const fmt=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":b<1073741824?(b/1048576).toFixed(1)+" MB":(b/1073741824).toFixed(2)+" GB";
+const ICONS={pdf:"📕",zip:"🗜️",rar:"🗜️","7z":"🗜️",apk:"🤖",mp4:"🎬",mkv:"🎬",mov:"🎬",mp3:"🎵",wav:"🎵",jpg:"🖼️",jpeg:"🖼️",png:"🖼️",gif:"🖼️",doc:"📝",docx:"📝",txt:"📄",xls:"📊",xlsx:"📊",ppt:"📽️",pptx:"📽️"};
+const icon=n=>ICONS[(String(n).split(".").pop()||"").toLowerCase()]||"📁";
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const b64d=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");s+="=".repeat((4-s.length%4)%4);return JSON.parse(decodeURIComponent(escape(atob(s))))};
+const Q=new URLSearchParams(location.search);
+const fileId=()=>(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||Q.get("file")||Q.get("tgWebAppStartParam")||"";
+/* ---- Firebase ---- */
+const loadScript=u=>new Promise((res,rej)=>{const s=document.createElement("script");s.src=u;s.onload=res;s.onerror=()=>rej(new Error("Firebase লোড হয়নি — নেটওয়ার্ক দেখুন"));document.head.appendChild(s)});
+async function fbInit(){
+  if(FB.db)return true;
+  if(!CFG){try{if(Q.get("fb"))CFG=b64d(Q.get("fb"));else CFG=JSON.parse(localStorage.getItem("fv_cfg")||"null")}catch(e){}}
+  if(!CFG)return false;
+  if(!window.firebase){const B="https://www.gstatic.com/firebasejs/10.12.2/";await loadScript(B+"firebase-app-compat.js");await loadScript(B+"firebase-firestore-compat.js")}
+  firebase.initializeApp(CFG);FB.db=firebase.firestore();FB.st=null;return true;
+}
+/* ---- Layout ---- */
+function shell(h,pill="● ONLINE"){app.innerHTML=`<header class="top"><div class="logo" onclick="logoTap()"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1305" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/><path d="M12 9v4M10 13h4"/></svg></div><div class="brand"><b>${esc(S.title)}</b><small>${esc(S.sub)}</small></div><div class="pill">${pill}</div></header><div class="fade">${h}</div><div class="footer">${esc(T().ft)}</div>`}
+function logoTap(){if(++taps>=5){taps=0;location.hash="#admin"}clearTimeout(logoTap.h);logoTap.h=setTimeout(()=>taps=0,1500)}
+window.addEventListener("hashchange",init);
+/* ---- Ads (Monetag) ---- */
+let adIdx=0;
+const curZones=()=>S.adz&&S.adz.length?S.adz:(S.ads&&S.ads.zone?[S.ads]:[]);
+async function runAd(){
+  try{
+    const z=curZones(),a=z.length?z[adIdx++%z.length]:null,fn=(a&&a.sdk)||"show_"+ZONE;
+    for(let k=0;k<20&&typeof window[fn]!=="function"&&(a||(tg&&tg.initData));k++)await new Promise(r=>setTimeout(r,150));
+    const f=window[fn];
+    if(typeof f==="function"){const r=await f();if(r&&r.reward_event_type==="not_valued")throw new Error("Ad was not completed. Please try again.");return true}
+    if(!(tg&&tg.initData)){await new Promise(r=>setTimeout(r,2500));return true} // শুধু ব্রাউজার টেস্ট
+    throw new Error("Ad failed to load. Check internet or disable ad blocker.");
+  }catch(e){toast(e.message||"Could not start the ad");return false}
+}
+function parseAds(c){c=(c||"").trim();const o={code:c,src:"",zone:"",sdk:""};if(!c)return o;
+  if(/^\d+$/.test(c)){o.zone=c;o.sdk="show_"+c;o.src="https://libtl.com/sdk.js";return o}
+  const g=r=>{const m=c.match(r);return m?m[1]:""};
+  o.src=g(/src\s*=\s*['"]?([^'"\s>]+)/i);o.zone=g(/data-zone\s*=\s*['"]?([\w-]+)/i);o.sdk=g(/data-sdk\s*=\s*['"]?([\w$]+)/i);
+  if(o.src.startsWith("//"))o.src="https:"+o.src;if(!o.sdk&&o.zone)o.sdk="show_"+o.zone;return o}
+function injectAds(){const z=curZones();if(!z.length)return;document.querySelectorAll("script[data-mt]").forEach(e=>e.remove());const old=document.getElementById("monetag-sdk");if(old)old.remove();
+  z.forEach(a=>{if(!a.src||!a.zone)return;const e=document.createElement("script");e.setAttribute("data-mt","1");e.src=a.src;e.async=true;e.dataset.zone=a.zone;e.dataset.sdk=a.sdk;document.head.appendChild(e)})}
+
+/* ---- Verify ---- */
+const STEPS=[["Human Check","Confirm that you are not a robot"],["Device Check","Making sure your device is safe"],["Account Confirmation","Final step — almost done!"]];
+function verifyScreen(){
+  const n=SES.n;
+  let h=`<div class="cd c" style="margin-top:0"><div class="rg"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#33291f" stroke-width="7"/><circle cx="50" cy="50" r="44" fill="none" stroke="url(#gg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="${276.5*(1-n/VERIFY_STEPS)}"/><defs><linearGradient id="gg"><stop offset="0" stop-color="#ffb84d"/><stop offset="1" stop-color="#ff5f6d"/></linearGradient></defs></svg><b>${n}<small>/${VERIFY_STEPS}</small></b></div><h2>${esc(T().vh)}</h2><p>${esc(T().vs)}</p></div><div class="cd" style="padding-top:6px">`;
+  for(let i=0;i<VERIFY_STEPS;i++){const st=i<n?"dn":i===n?"cur":"lk",s=[T()["s"+(i%3+1)+"t"],T()["s"+(i%3+1)+"d"]];
+    h+=`<div class="vs ${st}"><div class="ci">${st==="dn"?"✓":i+1}</div><div class="t"><b>${s[0]}</b><small>${st==="dn"?"Completed":s[1]}</small></div>${st==="cur"?`<button class="sm s" onclick="doVerify(this)">${esc(T().vb)}</button>`:st==="lk"?"🔒":""}</div>`}
+  shell(h+`</div><p class="c" style="font-size:12px;margin-top:12px">${esc(T().vn)}</p>`,"🔒 Secure");
+}
+async function doVerify(b){
+  b.disabled=true;b.innerHTML='<span class="sp"></span>Wait';
+  if(await runAd()){SES.n++;toast("✔ Step "+SES.n+" complete");if(SES.n>=VERIFY_STEPS){SES.ok=true;verifiedPage();return setTimeout(init,3600)}}
+  verifyScreen();
+}
+function verifiedPage(){
+  shell(`<div class="cd c"><div class="vbox"><div class="glow"></div><svg viewBox="0 0 170 170"><circle class="spinarc" cx="85" cy="85" r="70" fill="none" stroke="#ffb84d" stroke-width="5" stroke-dasharray="90 350" stroke-linecap="round"/><circle class="ringc" cx="85" cy="85" r="70" fill="none" stroke="#5ee6a8" stroke-width="6" stroke-linecap="round" transform="rotate(-90 85 85)"/><path class="tickp" d="M55 88l22 22 40-46" fill="none" stroke="#5ee6a8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="vword">${esc(T().okw)}</div><p class="vsub">${esc(T().oks)}</p></div>`,"✔ Verified");
+}
+/* ---- File page ---- */
+let FILE=null;
+async function fileScreen(){
+  const id=fileId();
+  if(!id)return homeScreen();
+  shell(`<div class="cd c"><p><span class="sp"></span>Loading your file...</p></div>`);
+  try{
+    if(!await fbInit())throw new Error("cfg");
+    const d=await FB.db.collection("files").doc(id).get();
+    if(!d.exists)return shell(`<div class="cd c"><div class="big">⚠️</div><h2>File not found</h2><p>This link is invalid or the file was removed.</p></div>`);
+    FILE={id,...d.data()};FB.db.collection("files").doc(id).update({views:firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+    renderFile();
+  }catch(e){shell(`<div class="cd c"><div class="big">⚠️</div><h2>Could not load</h2><p>Please check your connection and try again.</p></div>`)}
+}
+async function download(){
+  const f=FILE,b=$("#dl"),o=b&&b.innerHTML;if(b){b.disabled=true;b.innerHTML='<span class="sp"></span>Preparing...'}
+  const done=()=>FB.db.collection("files").doc(f.id).update({downloads:firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+  let url="";try{url=await tgUrl(f.fid)}catch(e){}
+  if(b){b.disabled=false;b.innerHTML=o}
+  if(url){
+    if(tg&&tg.downloadFile){tg.downloadFile({url,file_name:f.name},ok=>{if(ok){toast("⬇ Download started — check Telegram downloads");done()}else toast("Download cancelled")});return}
+    if(tg&&tg.openLink)tg.openLink(url);else{const a=document.createElement("a");a.href=url;a.download=f.name;a.target="_blank";a.click()}
+    return done();
+  }
+  const uid=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.id;
+  if(uid){try{await tgCall("sendDocument",{chat_id:uid,document:f.fid,caption:f.name});toast("📩 ফাইল বটের চ্যাটে পাঠানো হয়েছে");done()}catch(e){toast("পাঠানো যায়নি — আগে বটে /start দিন")}}
+  else toast("ফাইল লোড করা যায়নি")
+}
+/* ---- Admin ---- */
+function adminLogin(){
+  shell(`<div class="cd"><h3>🔐 অ্যাডমিন লগইন</h3><input id="pw" type="password" placeholder="পাসওয়ার্ড"><button class="btn" style="margin-top:0" onclick="doLogin()">লগইন</button><div class="err" id="le"></div></div>`,"ADMIN");
+}
+async function sha(t){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return"p:"+t}}
+const pwOk=async v=>S.pwh?(await sha(v))===S.pwh:v===ADMIN_PASSWORD;
+async function doLogin(){if(await pwOk($("#pw").value)){SES.admin=true;SES.pg="menu";adminGo("menu")}else $("#le").textContent="পাসওয়ার্ড ভুল"}
+let PICK=null;
+function adminPanel(){return adminGo()}
+async function saveCfg(){
+  try{const m=$("#cf").value.match(/\{[\s\S]*\}/);if(!m)throw 0;let o;try{o=JSON.parse(m[0])}catch(e){o=JSON.parse(m[0].replace(/([{,]\s*)([A-Za-z0-9_]+)\s*:/g,'$1"$2":').replace(/'/g,'"').replace(/,\s*\}/g,"}"))}
+    if(!o.apiKey||!o.projectId)throw 0;localStorage.setItem("fv_cfg",JSON.stringify(o));CFG=o;adminPanel()}
+  catch(e){$("#le").textContent="কনফিগ পড়া যায়নি — আবার কপি করে পেস্ট করুন"}
+}
+function resetCfg(){if(confirm("Firebase কনফিগ মুছবেন?")){localStorage.removeItem("fv_cfg");location.reload()}}
+function picked(i){PICK=i.files[0]||null;const p=$("#pk");if(PICK){p.classList.add("sel");p.firstChild.textContent="✔ "+PICK.name+" ("+fmt(PICK.size)+")"}}
+async function doUpload(b){
+  if(!PICK)return toast("আগে একটা ফাইল বাছুন");
+  if(!S.bot.token||!S.bot.chat)return toast("আগে নিচে টেলিগ্রাম বট সেটআপ করুন");
+  if(PICK.size>50*1048576)return toast("ফাইল সর্বোচ্চ ৫০ MB হতে পারে");
+  const id=FB.db.collection("files").doc().id,o=b.innerHTML;
+  b.disabled=true;const br=$("#br");br.style.display="block";
+  try{
+    const r=await tgUpload(PICK,p=>{br.firstChild.style.width=p+"%";b.innerHTML='<span class="sp"></span>আপলোড '+p+"%"});
+    const cover=COVER||"";
+    await FB.db.collection("files").doc(id).set({cover,ads:Math.max(0,Math.min(50,+$("#ac").value||0)),name:PICK.name,title:$("#ti").value.trim(),notice:$("#no").value.trim(),size:PICK.size,type:PICK.type||"",fid:r.fid,mid:r.mid,views:0,downloads:0,createdAt:Date.now()});
+    PICK=null;COVER=null;await copyLink(id);adminGo("flist");
+  }catch(e){toast("আপলোড ব্যর্থ: "+((e&&e.message)||"বট/চ্যানেল পরীক্ষা করুন"));b.disabled=false;b.innerHTML=o;br.style.display="none"}
+}
+function linkFor(id){return BOT_LINK?BOT_LINK+(BOT_LINK.includes("?")?"&":"?")+"startapp="+id:location.origin+location.pathname+"?file="+id+(FIREBASE_CONFIG?"":"&fb="+b64e(CFG))}
+async function copyLink(id){const l=linkFor(id);try{await navigator.clipboard.writeText(l);toast("✔ লিংক কপি হয়েছে")}catch(e){prompt("লিংক কপি করুন:",l)}}
+async function editNotice(id){const f=await FB.db.collection("files").doc(id).get(),n=prompt("নতুন নোটিশ (ফাঁকা = মুছে ফেলুন):",(f.data().notice)||"");if(n===null)return;await FB.db.collection("files").doc(id).update({notice:n.trim()});toast("নোটিশ আপডেট হয়েছে");adminPanel()}
+async function delFile(id){if(!confirm("ফাইলটি স্থায়ীভাবে মুছবেন?"))return;try{const d=await FB.db.collection("files").doc(id).get();await tgDel(d.data());await FB.db.collection("files").doc(id).delete();toast("মুছে ফেলা হয়েছে");adminPanel()}catch(e){toast("মোছা যায়নি")}}
+
+/* ---- Home (no file link) ---- */
+const GR=["linear-gradient(120deg,#ff9a3c,#ff5f6d)","linear-gradient(120deg,#7b5cff,#ff5f9e)","linear-gradient(120deg,#12b886,#3b82f6)"];
+const cu=u=>String(u||"").replace(/['"()\\\s]/g,c=>encodeURIComponent(c));
+const tc=c=>{const n=parseInt((c||"#ff7a3d").slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return(r*299+g*587+b*114)/1000>150?"#1a0f08":"#fff"};
+const bgOf=(b,i)=>b.img?`background-image:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,.05)),url('${cu(b.img)}')`:`background:${GR[i%3]}`;
+const mst=m=>{const x=m.x??50,y=m.y??50,z=m.zoom??100,s=m.size??120;return{w:m.shape==="rect"?`width:100%;height:${s}px;border-radius:16px`:`width:${s}px;height:${s}px;border-radius:50%`,i:`width:100%;height:100%;object-fit:cover;object-position:${x}% ${y}%;transform:scale(${z/100});transform-origin:${x}% ${y}%`}};
+function mediaHTML(m){m=m||{};const st=mst(m);
+  if(!(m.src||m.url))return `<div class="mw ph" style="${st.w}">📣</div>`;
+  return `<div class="mw" style="${st.w}">${m.type==="video"?`<video class="mi" src="${esc(m.src||m.url)}" autoplay muted loop playsinline style="${st.i}"></video>`:`<img class="mi" src="${esc(m.src||m.url)}" alt="" style="${st.i}">`}</div>`}
+function goLink(u){if(!/^https?:\/\//i.test(u||""))return toast("লিংক সেট করা নেই");if(tg&&/^https:\/\/t\.me\//i.test(u)&&tg.openTelegramLink)tg.openTelegramLink(u);else if(tg&&tg.openLink)tg.openLink(u);else window.open(u,"_blank")}
+let adBusy=false;
+async function adGo(u){if(!/^https?:\/\//i.test(u||""))return toast("লিংক সেট করা নেই");if(adBusy)return;adBusy=true;
+  try{const n=S.adLink==null?1:S.adLink;if(n>0)toast("Loading ad...");for(let k=0;k<n;k++){if(!await runAd())return}goLink(u)}finally{adBusy=false}}
+const goB=i=>adGo(S.banners[i]&&S.banners[i].link);
+function startBn(){clearInterval(startBn.t);const e=$("#bn");if(!e||e.children.length<2)return;startBn.t=setInterval(()=>{const e=$("#bn");if(!e)return clearInterval(startBn.t);const w=e.clientWidth,i=Math.round(e.scrollLeft/w);e.scrollTo({left:((i+1)%e.children.length)*w,behavior:"smooth"})},4000)}
+function bnDot(){const e=$("#bn"),i=Math.round(e.scrollLeft/e.clientWidth);document.querySelectorAll(".bd i").forEach((d,j)=>d.classList.toggle("on",j===i))}
+function homeScreen(){
+  const B=S.banners,p=S.promo,c=p.color||"#ff7a3d";
+  const ban=B.length?`<div class="bn" id="bn" onscroll="bnDot()">${B.map((b,i)=>`<div class="bs" onclick="goB(${i})" style="${bgOf(b,i)};height:${S.bnH||140}px;min-height:0"><div><b>${esc(b.title)}</b><p>${esc(b.desc)}</p><span class="go">Open ›</span></div></div>`).join("")}</div>${B.length>1?`<div class="bd">${B.map((_,i)=>`<i class="${i?"":"on"}"></i>`).join("")}</div>`:""}`:"";
+  shell(ban+`<div class="cd pm"><div class="tp">${mediaHTML(p.media)}<div class="nm">${esc(p.name)}</div><div class="sb">${esc(p.sub)}</div></div><div class="bt2"><h2>${esc(p.title)}</h2><div class="ds">${esc(p.desc)}</div><button class="btn" style="background:${esc(c)};color:${tc(c)};box-shadow:0 10px 26px ${esc(c)}55" onclick="adGo(S.promo.link)">${esc(p.btn)}</button></div></div>`);
+  setTimeout(startBn,50);
+}
+/* ---- Home admin ---- */
+let H=null;const clone=o=>JSON.parse(JSON.stringify(o));
+function homeAdmin(){return adminGo()}
+function pvBtn(){const b=$("#bp");if(!b)return;const c=H.promo.color||"#ff7a3d";b.textContent=H.promo.btn;b.style.cssText=`margin-top:4px;background:${c};color:${tc(c)};opacity:1;cursor:default`}
+function setM(k,v){H.promo.media[k]=v;const e=$("#v_"+k);if(e)e.textContent=v+(k==="size"?"px":"%");const w=$("#mp .mw"),i=$("#mp .mi"),st=mst(H.promo.media);if(w)w.style.cssText=st.w;if(i)i.style.cssText=st.i}
+async function mPick(i){const f=i.files[0];if(!f)return;if(f.size>50*1048576)return toast("ফাইল অনেক বড় (সর্বোচ্চ ৫০ MB)");const M=H.promo.media;
+  if(f.type.startsWith("video")){M.url=URL.createObjectURL(f);M.type="video";M._file=f;return homeAdmin()}
+  const d=await cropImage(f,M.shape==="rect"?340/(M.size||120):1,{max:900,lim:200000});if(!d)return;
+  M.url=d;M.type="image";M.zoom=100;M.x=50;M.y=50;delete M._file;homeAdmin()}
+function mDel(){const M=H.promo.media;M.url="";delete M._file;homeAdmin()}
+function bAdd(){H.banners.push({title:"",desc:"",link:"",img:""});homeAdmin()}
+function bDel(i){H.banners.splice(i,1);homeAdmin()}
+async function bPick(i,inp){const f=inp.files[0];if(!f)return;const d=await cropImage(f,340/(H.bnH||140),{max:900,lim:110000});if(!d)return;H.banners[i].img=d;delete H.banners[i]._file;homeAdmin()}
+async function upM(f,b,lim){
+  if(f.type.startsWith("image/"))return shrink(f,900,lim||200000);
+  if(window.PREVIEW)return URL.createObjectURL(f);
+  if(!S.bot.token||!S.bot.chat)throw new Error("আগে টেলিগ্রাম বট সেটআপ করুন");
+  const r=await tgUpload(f,p=>b.innerHTML='<span class="sp"></span>আপলোড '+p+"%");return "tg:"+r.fid;
+}
+async function saveHome(b){
+  b.disabled=true;const o=b.innerHTML;
+  try{
+    const out=JSON.parse(JSON.stringify(H,(k,v)=>k==="_file"?undefined:v));
+    if(H.promo.media._file)out.promo.media.url=await upM(H.promo.media._file,b,200000);
+    for(let i=0;i<H.banners.length;i++)if(H.banners[i]._file)out.banners[i].img=await upM(H.banners[i]._file,b,110000);
+    out.ads=S.ads;out.adz=S.adz;out.pwh=S.pwh;out.bot=S.bot;out.adLink=S.adLink;delete out.promo.media.src;if(JSON.stringify(out).length>900000)throw new Error("সেটিংস অনেক বড় — ব্যানারের ছবি কমান");await FB.db.collection("settings").doc("app").set(out);
+    S=mergeS(out);H=clone(S);toast("✔ সেভ হয়েছে");homeAdmin();
+  }catch(e){toast("সেভ ব্যর্থ: "+((e&&e.code)||(e&&e.message)||"Rules পরীক্ষা করুন"));b.disabled=false;b.innerHTML=o}
+}
+/* ---- File unlock / cover ---- */
+let COVER=null;
+async function pickedC(i){const f=i.files[0];if(!f)return;const d=await cropImage(f,16/9,{max:700,lim:150000});if(!d)return;COVER=d;const p=$("#pk2");p.classList.add("sel");p.firstChild.textContent="✔ ছবি ক্রপ হয়েছে (বদলাতে ট্যাপ)"}
+const need=f=>f.ads==null?1:+f.ads;
+function renderFile(){
+  const f=FILE,n=need(f),u=Math.min(SES.unl[f.id]||0,n),ok=u>=n,left=n-u;
+  shell(`<div class="cd">${f.cover?`<img class="cv" src="${esc(f.cover)}" alt="">`:""}<div class="fi">${f.cover?"":`<div class="ico">${icon(f.name)}</div>`}<div><b>${esc(f.title||f.name)}</b><small>${esc(f.name)}</small><div class="chips"><i>${fmt(f.size||0)}</i><i>${esc((f.name.split(".").pop()||"file").toUpperCase())}</i><i>${ok?"🔓 Unlocked":"🔒 Locked"}</i></div></div></div>${f.notice?`<div class="notice"><b>${esc(T().nt)}</b>${esc(f.notice)}</div>`:""}${ok?`<button class="btn" id="dl" onclick="download()">⬇  ${esc(T().dl)}</button>`:`<button class="btn" onclick="unlock(this)">🔓 ${esc(T().ul)}</button><p class="c" style="margin-top:10px;font-size:12.5px">Watch ${left} more ad${left>1?"s":""} to unlock · ${u}/${n}</p><div class="bar"><i style="width:${n?u/n*100:0}%"></i></div>`}</div>`,ok?"🔓 Ready":"🔒 Locked");
+}
+async function unlock(b){b.disabled=true;b.innerHTML='<span class="sp"></span>Wait';
+  if(await runAd()){SES.unl[FILE.id]=(SES.unl[FILE.id]||0)+1;toast(SES.unl[FILE.id]>=need(FILE)?"🔓 File unlocked!":"✔ Ad "+SES.unl[FILE.id]+" of "+need(FILE))}
+  renderFile()}
+async function editAds(id){const d=await FB.db.collection("files").doc(id).get(),n=prompt("আনলক করতে কয়টা অ্যাড দেখতে হবে? (0 = ফ্রি)",d.data().ads==null?1:d.data().ads);if(n===null)return;
+  await FB.db.collection("files").doc(id).update({ads:Math.max(0,Math.min(50,parseInt(n)||0))});toast("✔ আপডেট হয়েছে");adminPanel()}
+async function copyCfgLine(){const l="const FIREBASE_CONFIG="+JSON.stringify(CFG)+";";try{await navigator.clipboard.writeText(l);toast("✔ কপি হয়েছে")}catch(e){prompt("এই লাইনটা কপি করুন:",l)}}
+/* ---- Telegram storage ---- */
+async function tgCall(m,p){const fd=new FormData();for(const k in p)fd.append(k,p[k]);const r=await fetch(`https://api.telegram.org/bot${S.bot.token}/${m}`,{method:"POST",body:fd}),j=await r.json();if(!j.ok)throw new Error(j.description||"Telegram error");return j.result}
+async function tgUrl(fid){const r=await tgCall("getFile",{file_id:fid});return `https://api.telegram.org/file/bot${S.bot.token}/${r.file_path}`}
+async function tgDel(f){try{if(f&&f.mid)await tgCall("deleteMessage",{chat_id:S.bot.chat,message_id:f.mid})}catch(e){}}
+function tgUpload(file,onp){return new Promise((res,rej)=>{const fd=new FormData();fd.append("chat_id",S.bot.chat);fd.append("document",file,file.name);fd.append("caption",file.name);
+  const x=new XMLHttpRequest();x.open("POST",`https://api.telegram.org/bot${S.bot.token}/sendDocument`);
+  x.upload.onprogress=e=>{if(e.lengthComputable&&onp)onp(Math.round(e.loaded/e.total*100))};
+  x.onload=()=>{try{const j=JSON.parse(x.responseText);if(!j.ok)throw new Error(j.description);const d=j.result.document||j.result.video||j.result.audio||{};res({fid:d.file_id,mid:j.result.message_id})}catch(e){rej(e)}};
+  x.onerror=()=>rej(new Error("নেটওয়ার্ক ত্রুটি"));x.send(fd)})}
+function shrink(f,max,lim){return new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(f);
+  im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),w=Math.round(im.width*k),h=Math.round(im.height*k),c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(im,0,0,w,h);
+    let q=.8,d=c.toDataURL("image/jpeg",q);while(d.length>(lim||200000)&&q>.3){q-=.1;d=c.toDataURL("image/jpeg",q)}URL.revokeObjectURL(u);res(d)};
+  im.onerror=()=>rej(new Error("ছবি পড়া যায়নি"));im.src=u})}
+async function saveBot(b){const bot={token:$("#bt").value.trim(),chat:$("#bc").value.trim()};b.disabled=true;
+  try{await FB.db.collection("settings").doc("app").set({bot},{merge:true});S.bot=bot;toast("✔ বট সেভ হয়েছে")}catch(e){toast("সেভ ব্যর্থ — Firestore Rules দেখুন")}b.disabled=false}
+async function testBot(){S.bot={token:$("#bt").value.trim(),chat:$("#bc").value.trim()};
+  try{const me=await tgCall("getMe",{});await tgCall("sendMessage",{chat_id:S.bot.chat,text:"✅ Vaultly storage connected"});toast("✔ কানেক্টেড: @"+me.username+" — চ্যানেলে মেসেজ গেছে")}catch(e){toast("ব্যর্থ: "+e.message)}}
+/* ---- Admin: ধাপে ধাপে মেনু ---- */
+const MENU={
+ menu:{t:"🛡️ অ্যাডমিন প্যানেল",items:[["files","📁","ফাইল","আপলোড, লিংক, তালিকা"],["home","🏠","হোম পেজ","ব্যানার, ছবি, লেখা, জয়েন বাটন"],["ads","💰","অ্যাড সেটিংস","Monetag কোড ও অ্যাড সংখ্যা"],["texts","🔤","পেজের লেখা","ভেরিফাই ও ফাইল পেজ"],["bot","🤖","ফাইল স্টোরেজ","টেলিগ্রাম বট সেটআপ"],["set","⚙️","সেটিংস","পাসওয়ার্ড, Firebase"]]},
+ files:{up:"menu",t:"📁 ফাইল",items:[["fnew","➕","নতুন ফাইল","আপলোড করে লিংক তৈরি"],["flist","📂","ফাইলের তালিকা","লিংক, নোটিশ, অ্যাড সংখ্যা"]]},
+ home:{up:"menu",t:"🏠 হোম পেজ",items:[["h_title","🏷️","উপরের টাইটেল","অ্যাপের নাম ও ছোট লেখা"],["h_ban","🖼️","ব্যানার","ছবি, লিংক, সাইজ"],["h_media","📣","ছবি / ভিডিও","ক্রপ, সাইজ, আকৃতি"],["h_text","✍️","লেখা","নাম, টাইটেল, বর্ণনা"],["h_btn","🔘","জয়েন বাটন","নাম, লিংক, রং"]]},
+ set:{up:"menu",t:"⚙️ সেটিংস",items:[["pw","🔐","পাসওয়ার্ড বদলান","অ্যাডমিন পাসওয়ার্ড"],["fb","🔥","Firebase","ডাটাবেস কানেকশন"]]}};
+const LT={fnew:"➕ নতুন ফাইল",flist:"📂 ফাইলের তালিকা",h_title:"🏷️ উপরের টাইটেল",h_ban:"🖼️ ব্যানার",h_media:"📣 ছবি / ভিডিও",h_text:"✍️ লেখা",h_btn:"🔘 জয়েন বাটন",ads:"💰 অ্যাড সেটিংস",texts:"🔤 পেজের লেখা",bot:"🤖 ফাইল স্টোরেজ",pw:"🔐 পাসওয়ার্ড",fb:"🔥 Firebase"};
+const UP={fnew:"files",flist:"files",h_title:"home",h_ban:"home",h_media:"home",h_text:"home",h_btn:"home",ads:"menu",texts:"menu",bot:"menu",pw:"set",fb:"set"};
+const SAVE=`<button class="btn" id="sv" onclick="saveHome(this)">💾 সেভ করুন</button>`;
+function menuHTML(pg){const m=MENU[pg];
+  return `<div class="bk">${m.up?`<button class="sm" onclick="adminGo('${m.up}')">← পিছনে</button>`:""}<b>${m.t}</b></div>`+m.items.map(a=>`<div class="mi" onclick="adminGo('${a[0]}')"><div class="mic">${a[1]}</div><div><b>${a[2]}</b><small>${a[3]}</small></div><span class="ar">›</span></div>`).join("")+(pg==="menu"?`<div class="mi" onclick="location.hash='';location.reload()"><div class="mic">↩️</div><div><b>অ্যাপে ফিরুন</b><small>অ্যাডমিন থেকে বের হন</small></div><span class="ar">›</span></div>`:"")}
+async function adminGo(pg){
+  pg=pg||SES.pg||"menu";SES.pg=pg;
+  if(MENU[pg])return shell(`<div class="sl">${menuHTML(pg)}</div>`,"ADMIN");
+  if(pg!=="fb"&&!await fbInit().catch(()=>false)){pg=SES.pg="fb"}
+  if((/^h_/.test(pg)||pg==="texts")&&!H)H=clone(S);
+  let body="";
+  if(pg==="fnew")body=fnewHTML();else if(pg==="flist")body=await flistHTML();else if(pg==="h_title")body=hTitleHTML()+SAVE;else if(pg==="h_ban")body=hBanHTML()+SAVE;
+  else if(pg==="h_media")body=hMediaHTML()+SAVE;else if(pg==="h_text")body=hTextHTML()+SAVE;else if(pg==="h_btn")body=hBtnHTML()+SAVE;else if(pg==="texts")body=textsHTML()+SAVE;
+  else if(pg==="ads")body=adsPage();else if(pg==="bot")body=botHTML();else if(pg==="pw")body=pwHTML();else if(pg==="fb")body=fbHTML();
+  shell(`<div class="sl"><div class="bk"><button class="sm" onclick="adminGo('${UP[pg]}')">← পিছনে</button><b>${LT[pg]}</b></div>${body}</div>`,"ADMIN");
+  if(pg==="h_btn")pvBtn();
+}
+function fnewHTML(){return `<div class="cd"><label class="pick" id="pk">📁 ফাইল বাছুন (ফোনের স্টোরেজ থেকে)<input type="file" id="pf" onchange="picked(this)"></label><label>টাইটেল (ঐচ্ছিক)</label><input id="ti" placeholder="ফাইলের নাম/টাইটেল"><label class="pick" id="pk2" style="padding:14px">🖼 ফাইলের ছবি (গ্যালারি থেকে — ক্রপ করা যাবে)<input type="file" accept="image/*" onchange="pickedC(this)"></label><label>আনলক করতে কয়টা অ্যাড দেখতে হবে (0 = ফ্রি)</label><input id="ac" type="number" min="0" max="50" value="2"><p style="font-size:12.5px">যতটা লিখবেন, ইউজারকে ততটা অ্যাড (প্রতিবার ১টা) দেখে ফাইলটা আনলক করতে হবে।</p><label>নোটিশ (ফাইলের নিচে দেখাবে)</label><textarea id="no" rows="3" placeholder="যেমন: ফাইলটি ইনস্টল করার আগে ..."></textarea><button class="btn" style="margin-top:4px" id="up" onclick="doUpload(this)">আপলোড ও লিংক তৈরি করুন</button><div class="bar" id="br" style="display:none"><i></i></div></div>`}
+async function flistHTML(){let files=[];try{const q=await FB.db.collection("files").orderBy("createdAt","desc").get();files=q.docs.map(d=>({id:d.id,...d.data()}))}catch(e){toast("লিস্ট লোড হয়নি — Rules পরীক্ষা করুন")}
+  const tot=files.reduce((a,f)=>({v:a.v+(f.views||0),d:a.d+(f.downloads||0)}),{v:0,d:0});
+  return `<div class="cd"><p>📁 ${files.length}টি ফাইল · 👁 ${tot.v} ভিউ · ⬇ ${tot.d} ডাউনলোড</p>${files.length?files.map(f=>`<div class="it">${f.cover?`<img src="${esc(f.cover)}" alt="" style="width:56px;height:56px;border-radius:12px;object-fit:cover;float:right;margin-left:8px">`:""}<b>${icon(f.name)} ${esc(f.title||f.name)}</b><p style="margin:2px 0">${fmt(f.size||0)} · 👁 ${f.views||0} · ⬇ ${f.downloads||0} · 🎯 ${f.ads==null?1:f.ads} অ্যাড</p>${f.notice?`<p style="color:#ffb84d;font-size:12.5px">📢 ${esc(f.notice)}</p>`:""}<div class="bt"><button class="sm s" onclick="copyLink('${f.id}')">🔗 লিংক</button><button class="sm" onclick="editNotice('${f.id}')">📢 নোটিশ</button><button class="sm" onclick="editAds('${f.id}')">🎯 অ্যাড</button><button class="sm r" onclick="delFile('${f.id}')">🗑</button></div></div>`).join(""):"<p>এখনো কোনো ফাইল নেই।</p>"}</div>`}
+const hTitleHTML=()=>`<div class="cd"><label>অ্যাপের নাম</label><input value="${esc(H.title)}" oninput="H.title=this.value"><label>নামের নিচের ছোট লেখা</label><input value="${esc(H.sub)}" oninput="H.sub=this.value"></div>`;
+const bnPv=()=>document.querySelectorAll(".bpv").forEach(e=>e.style.height=H.bnH+"px");
+function hBanHTML(){if(!H.bnH)H.bnH=140;return `<div class="cd"><label>ব্যানারের উচ্চতা: <b id="bhv">${H.bnH}px</b></label><input type="range" min="80" max="300" value="${H.bnH}" style="padding:0;margin:4px 0 4px" oninput="H.bnH=+this.value;$('#bhv').textContent=this.value+'px';bnPv()"><p style="font-size:12.5px">ছবি দেওয়ার সময় এই উচ্চতা অনুযায়ী ক্রপ ফ্রেম আসবে, তাই আগে উচ্চতা ঠিক করুন।</p></div><div class="cd"><h3>ব্যানার (${H.banners.length}টি)</h3>${H.banners.map((b,i)=>`<div class="it"><div class="bpv" style="height:${H.bnH}px;border-radius:14px;margin-bottom:8px;${bgOf(b,i)};background-size:cover;background-position:center"></div><label class="pick" style="padding:10px;margin:0 0 6px">🖼️ ${b.img?"ছবি বদলান":"গ্যালারি থেকে ছবি দিন (ক্রপ করা যাবে)"}<input type="file" accept="image/*" onchange="bPick(${i},this)"></label><input placeholder="টাইটেল" value="${esc(b.title)}" oninput="H.banners[${i}].title=this.value"><input placeholder="ছোট বর্ণনা" value="${esc(b.desc)}" oninput="H.banners[${i}].desc=this.value"><input placeholder="লিংক (https://...)" value="${esc(b.link)}" oninput="H.banners[${i}].link=this.value"><div class="bt"><button class="sm r" onclick="bDel(${i})">🗑 এই ব্যানার মুছুন</button></div></div>`).join("")}<button class="sm s" style="width:100%;margin-top:8px" onclick="bAdd()">＋ নতুন ব্যানার</button></div>`}
+function hMediaHTML(){const p=H.promo,M=p.media,sh=M.shape||"circle";
+  const rng=(l,k,mn,mx,v,u)=>`<label>${l}: <b id="v_${k}">${v}${u}</b></label><input type="range" min="${mn}" max="${mx}" value="${v}" style="padding:0;margin:4px 0 8px" oninput="setM('${k}',+this.value)">`;
+  return `<div class="cd"><p>গ্যালারি থেকে ছবি বা ভিডিও দিন। ছবির ক্ষেত্রে ক্রপ ফ্রেম আসবে।</p><label class="pick">📁 ছবি বা ভিডিও বাছুন<input type="file" accept="image/*,video/*" onchange="mPick(this)"></label><div id="mp" style="background:#100d0b;border-radius:16px;padding:14px;margin-bottom:8px">${mediaHTML(M)}</div><label>আকৃতি</label><select onchange="setM('shape',this.value);homeAdmin()"><option value="circle" ${sh==="circle"?"selected":""}>⭕ গোল</option><option value="rect" ${sh==="rect"?"selected":""}>▭ চওড়া (পুরো প্রস্থ)</option></select>${rng("সাইজ / উচ্চতা","size",60,320,M.size??120,"px")}${rng("জুম","zoom",100,300,M.zoom??100,"%")}${rng("অবস্থান — বামে/ডানে","x",0,100,M.x??50,"%")}${rng("অবস্থান — উপরে/নিচে","y",0,100,M.y??50,"%")}${M.url?`<button class="sm r" onclick="mDel()">🗑 ছবি/ভিডিও সরান</button>`:""}</div>`}
+const hTextHTML=()=>{const p=H.promo;return `<div class="cd"><label>নাম (ছবির নিচে বড় লেখা)</label><input value="${esc(p.name)}" oninput="H.promo.name=this.value"><label>ছোট লেখা (নামের নিচে)</label><input value="${esc(p.sub)}" oninput="H.promo.sub=this.value"><label>টাইটেল</label><input value="${esc(p.title)}" oninput="H.promo.title=this.value"><label>বড় বর্ণনা (ইমোজি ও নতুন লাইন চলবে)</label><textarea rows="6" oninput="H.promo.desc=this.value">${esc(p.desc)}</textarea></div>`};
+const hBtnHTML=()=>{const p=H.promo;return `<div class="cd"><label>বাটনের নাম</label><input value="${esc(p.btn)}" oninput="H.promo.btn=this.value;pvBtn()"><label>বাটনের লিংক</label><input placeholder="https://t.me/yourchannel" value="${esc(p.link)}" oninput="H.promo.link=this.value"><label>বাটনের রং</label><input type="color" value="${esc(p.color||"#ff7a3d")}" oninput="H.promo.color=this.value;pvBtn()"><button class="btn" id="bp" style="margin-top:4px" disabled>${esc(p.btn)}</button></div>`};
+const textsHTML=()=>`<div class="cd"><p>ভেরিফাই ও ফাইল পেজের সব লেখা নিজের মতো বদলান।</p>${[["ভেরিফাই পেজের হেডিং","vh"],["হেডিংয়ের নিচের লেখা","vs"],["ধাপ ১ — নাম","s1t"],["ধাপ ১ — বর্ণনা","s1d"],["ধাপ ২ — নাম","s2t"],["ধাপ ২ — বর্ণনা","s2d"],["ধাপ ৩ — নাম","s3t"],["ধাপ ৩ — বর্ণনা","s3d"],["Verify বাটনের নাম","vb"],["নিচের ছোট নোট","vn"],["VERIFIED পেজের বড় লেখা","okw"],["VERIFIED পেজের নিচের লেখা","oks"],["Unlock বাটনের নাম","ul"],["Download বাটনের নাম","dl"],["নোটিশ বক্সের টাইটেল","nt"],["একদম নিচের ফুটার লেখা","ft"]].map(a=>`<label>${a[0]}</label><input value="${esc(H.t[a[1]])}" oninput="H.t.${a[1]}=this.value">`).join("")}</div>`;
+const botHTML=()=>`<div class="cd"><p>ফাইল জমা থাকবে আপনার প্রাইভেট টেলিগ্রাম চ্যানেলে। ১) @BotFather থেকে নতুন একটা বট বানিয়ে টোকেন কপি করুন। ২) একটা প্রাইভেট চ্যানেল খুলে বটকে অ্যাডমিন করুন। ৩) চ্যানেলের আইডি (-100 দিয়ে শুরু) নিচে দিন।</p><label>বট টোকেন</label><input id="bt" value="${esc(S.bot.token)}" placeholder="123456:ABC-DEF..."><label>চ্যানেল আইডি</label><input id="bc" value="${esc(S.bot.chat)}" placeholder="-1001234567890"><button class="btn" style="margin-top:0" onclick="saveBot(this)">💾 সেভ করুন</button><button class="sm" style="margin-top:10px" onclick="testBot()">🧪 কানেকশন টেস্ট</button>${S.bot.token?`<p style="color:#5ee6a8">✔ বট সেট করা আছে</p>`:""}</div>`;
+const pwHTML=()=>`<div class="cd"><label>বর্তমান পাসওয়ার্ড</label><input id="pw0" type="password"><label>নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label><input id="pw1" type="password"><label>নতুন পাসওয়ার্ড আবার</label><input id="pw2" type="password"><button class="btn" onclick="chPw(this)">💾 পাসওয়ার্ড বদলান</button><div class="err" id="pwe"></div></div>`;
+async function chPw(b){const a=$("#pw0").value,n=$("#pw1").value,m=$("#pw2").value,e=$("#pwe");
+  if(!await pwOk(a))return e.textContent="বর্তমান পাসওয়ার্ড ভুল";if(n.length<6)return e.textContent="নতুন পাসওয়ার্ড অন্তত ৬ অক্ষর হতে হবে";if(n!==m)return e.textContent="দুটো পাসওয়ার্ড মেলেনি";
+  b.disabled=true;try{const h=await sha(n);await FB.db.collection("settings").doc("app").set({pwh:h},{merge:true});S.pwh=h;toast("✔ পাসওয়ার্ড বদলানো হয়েছে");adminGo("set")}catch(x){e.textContent="সেভ ব্যর্থ — Firestore Rules দেখুন"}b.disabled=false}
+function fbHTML(){
+  if(!CFG)return `<div class="cd"><p>ফাইলের তালিকা ও সেটিংস রাখার জন্য অ্যাপের একটা ডাটাবেস লাগে, সেটাই Firebase। Firebase Console → Project settings → Your apps → firebaseConfig কপি করে নিচে পেস্ট করুন (শুধু apiKey ও projectId লাগবে)।</p><p style="color:#ffb84d">⚠️ টেলিগ্রামে এই সেভ মুছে যেতে পারে। তাই সেভ করার পর যে লাইনটা দেখাবে সেটা index.html ফাইলের <b>FIREBASE_CONFIG</b> এ বসিয়ে দিন।</p><textarea id="cf" rows="7" placeholder='{apiKey:"...",projectId:"..."}'></textarea><button class="btn" style="margin-top:0" onclick="saveCfg()">সেভ করুন</button><div class="err" id="le"></div></div>`;
+  return `<div class="cd"><p style="color:#5ee6a8">✔ Firebase কানেক্টেড (${esc(CFG.projectId)})</p></div>${FIREBASE_CONFIG?"":`<div class="cd"><h3>📌 স্থায়ী করুন</h3><p>নিচের বাটনে লাইনটা কপি করে index.html ফাইলে <b>const FIREBASE_CONFIG=null;</b> এর জায়গায় বসান, তারপর ফাইলটা আবার হোস্ট করুন।</p><button class="sm s" onclick="copyCfgLine()">📋 লাইনটা কপি করুন</button></div><div class="cd"><button class="sm r" onclick="resetCfg()">Firebase কনফিগ মুছুন</button></div>`}`}
+let ADZ=[];
+function adsPage(){ADZ=clone(curZones());if(!ADZ.length)ADZ.push({code:""});return `<div class="cd" id="adzc">${adzList()}</div><div class="cd"><h3>🎯 অ্যাড সংখ্যা</h3><p>ভেরিফাই ধাপে ১টা করে (মোট ৩টা)। প্রতিটা ফাইলের আনলক অ্যাড সংখ্যা ফাইল আপলোডের সময় বা ফাইলের তালিকা থেকে ঠিক করা যায়।</p><label>ব্যানার ও Join বাটনে ক্লিকে কয়টা অ্যাড (0 = অ্যাড ছাড়া)</label><input id="adl" type="number" min="0" max="5" value="${S.adLink==null?1:S.adLink}"></div><button class="btn" onclick="saveAdz(this)">💾 সেভ করুন</button>`}
+const adzList=()=>`<p>Monetag থেকে পাওয়া SDK কোড (script ট্যাগ) এখানে পেস্ট করুন; শুধু Zone ID লিখলেও চলবে। একাধিক কোড দিলে অ্যাডগুলো ঘুরে ঘুরে (১ম, ২য়, ৩য়...) দেখাবে।</p>${ADZ.map((a,i)=>`<div class="it"><label>অ্যাড কোড ${i+1} ${a.zone?`<span style="color:#5ee6a8">✔ Zone ${esc(a.zone)}</span>`:""}</label><textarea rows="3" placeholder='<script src="//libtl.com/sdk.js" data-zone="1234567" data-sdk="show_1234567"><\/script>' oninput="ADZ[${i}].code=this.value">${esc(a.code||"")}</textarea>${ADZ.length>1?`<button class="sm r" onclick="adzDel(${i})">🗑 মুছুন</button>`:""}</div>`).join("")}<button class="sm s" style="width:100%;margin-top:8px" onclick="adzAdd()">＋ আরেকটা অ্যাড কোড</button>`;
+function adzAdd(){ADZ.push({code:""});$("#adzc").innerHTML=adzList()}
+function adzDel(i){ADZ.splice(i,1);$("#adzc").innerHTML=adzList()}
+async function saveAdz(b){const out=[];for(const a of ADZ){const c=(a.code||"").trim();if(!c)continue;const o=parseAds(c);if(!o.zone)return toast("একটা কোড থেকে Zone ID পাওয়া যায়নি");out.push(o)}
+  const n=Math.max(0,Math.min(5,parseInt($("#adl").value)||0));b.disabled=true;
+  try{await FB.db.collection("settings").doc("app").set({adz:out,ads:out[0]||{code:"",src:"",zone:"",sdk:""},adLink:n},{merge:true});S.adz=out;S.ads=out[0]||DS.ads;S.adLink=n;injectAds();toast("✔ সেভ হয়েছে")}catch(e){toast("সেভ ব্যর্থ — Firestore Rules দেখুন")}
+  b.disabled=false;adminGo("ads")}
+/* ---- ছবি ক্রপ ---- */
+function cropImage(file,asp,o){o=o||{};return new Promise(res=>{
+  const u=URL.createObjectURL(file),im=new Image();
+  im.onerror=()=>{toast("ছবি পড়া যায়নি");res(null)};
+  im.onload=()=>{
+    let fw=Math.min(innerWidth-32,420),fh=fw/asp;if(fh>innerHeight*.5){fh=innerHeight*.5;fw=fh*asp}
+    const base=Math.max(fw/im.width,fh/im.height);let z=1,ox=(fw-im.width*base)/2,oy=(fh-im.height*base)/2;
+    const m=document.createElement("div");m.style.cssText="position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;color:#fff";
+    m.innerHTML=`<b>ছবি ক্রপ করুন — টেনে সরান, স্লাইডারে জুম</b><div id="cf_" style="width:${fw}px;height:${fh}px;overflow:hidden;position:relative;border-radius:14px;border:2px solid #ffb84d;touch-action:none;background:#000"><img id="ci_" alt="" style="position:absolute;left:0;top:0;max-width:none;user-select:none;-webkit-user-drag:none"></div><input id="cz_" type="range" min="100" max="400" value="100" style="width:${fw}px"><div style="display:flex;gap:10px;width:${fw}px"><button class="sm" style="flex:1" id="cx_">✖ বাতিল</button><button class="btn" style="flex:2;margin:0;padding:12px" id="cs_">✔ ক্রপ করুন</button></div>`;
+    document.body.appendChild(m);
+    const el=m.querySelector("#ci_"),fr=m.querySelector("#cf_");el.src=u;
+    const draw=()=>{const s=base*z,w=im.width*s,h=im.height*s;ox=Math.min(0,Math.max(fw-w,ox));oy=Math.min(0,Math.max(fh-h,oy));el.style.width=w+"px";el.style.height=h+"px";el.style.left=ox+"px";el.style.top=oy+"px"};draw();
+    let px=0,py=0,drag=false;
+    fr.onpointerdown=e=>{drag=true;px=e.clientX;py=e.clientY;fr.setPointerCapture(e.pointerId)};
+    fr.onpointermove=e=>{if(!drag)return;ox+=e.clientX-px;oy+=e.clientY-py;px=e.clientX;py=e.clientY;draw()};
+    fr.onpointerup=fr.onpointercancel=()=>{drag=false};
+    m.querySelector("#cz_").oninput=e=>{const cx=(fw/2-ox)/(base*z),cy=(fh/2-oy)/(base*z);z=e.target.value/100;ox=fw/2-cx*base*z;oy=fh/2-cy*base*z;draw()};
+    const close=v=>{m.remove();URL.revokeObjectURL(u);res(v)};
+    m.querySelector("#cx_").onclick=()=>close(null);
+    m.querySelector("#cs_").onclick=()=>{const s=base*z,sw=fw/s,sh=fh/s,ow=Math.min(o.max||900,Math.round(sw)),oh=Math.round(ow/asp),c=document.createElement("canvas");c.width=ow;c.height=oh;
+      c.getContext("2d").drawImage(im,-ox/s,-oy/s,sw,sh,0,0,ow,oh);let q=.85,d=c.toDataURL("image/jpeg",q);while(d.length>(o.lim||200000)&&q>.3){q-=.1;d=c.toDataURL("image/jpeg",q)}close(d)};
+  };im.src=u})}
+/* ---- Init ---- */
+async function loadS(){try{if(await fbInit()){const d=await FB.db.collection("settings").doc("app").get();if(d.exists)S=mergeS(d.data());const m=S.promo&&S.promo.media;if(m&&/^tg:/.test(m.url||"")){try{m.src=await tgUrl(m.url.slice(3))}catch(e){}}}}catch(e){}}
+async function init(){
+  if(!init.l){init.l=1;await loadS();injectAds()}
+  if(location.hash==="#admin")return SES.admin?adminPanel():adminLogin();
+  if(!SES.ok)return verifyScreen();
+  if(!fileId())return homeScreen();
+  fileScreen();
+}
+init();
+</script></body></html>
